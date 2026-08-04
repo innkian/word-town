@@ -28,7 +28,7 @@ const Story = (() => {
     document.getElementById('story-prompt').textContent = text;
     story.spoken = spoken;
   }
-  function speakPrompt() { if (story) Speech.say(story.spoken); }
+  function speakPrompt() { if (story && story.spoken) Speech.say(story.spoken); }
 
   function renderSlots() {
     const el = document.getElementById('story-slots');

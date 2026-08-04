@@ -11,6 +11,7 @@ const Delivery = (() => {
   const ROUND_LEN = 5;
   let area, promptEl;
   let task = null;          // current task
+  let lastSpoken = '';      // kept so the 🔊 button works between tasks too
   let roundDone = 0;        // tasks finished this run
   let firstTry = true;
 
@@ -36,7 +37,7 @@ const Delivery = (() => {
   }
 
   function speakPrompt() {
-    if (task) Speech.say(task.spoken);
+    Speech.say(task ? task.spoken : lastSpoken);
   }
 
   // ---------- task generation ----------
@@ -65,6 +66,7 @@ const Delivery = (() => {
   function setPrompt(text, spoken) {
     promptEl.textContent = text;
     task.spoken = spoken || text;
+    lastSpoken = task.spoken;
   }
 
   // ---- tap-the-object ----

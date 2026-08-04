@@ -109,6 +109,22 @@ const App = (() => {
       `<div class="mastery-bar"><div class="label">${conceptLabel(c.key)}</div>
        <div class="track"><div class="fill" style="width:${Math.round(c.score * 100)}%"></div></div></div>`).join('');
   }
+  function voicePanel() {
+    const voices = Speech.listVoices();
+    if (!Speech.supported) return '<div class="tip">This browser has no speech support.</div>';
+    if (!voices.length) {
+      return `<div class="tip"><b>No speech voices are installed on this device.</b>
+        On iPad: Settings → Accessibility → Spoken Content → Voices → English,
+        and download a voice (Australian "Karen" is a good match). Then reopen the game.</div>`;
+    }
+    const opts = voices.map(v =>
+      `<option value="${v.name}"${v.name === Speech.currentVoice() ? ' selected' : ''}>${v.name} (${v.lang})</option>`).join('');
+    return `<p>Voice: <select id="voice-pick">${opts}</select>
+      <button id="voice-test" class="small-btn">🔊 Test</button></p>
+      <p style="font-size:13px;color:#647">If you hear nothing, pick a different voice — iPads list
+      voices that have not been downloaded, and those stay silent.</p>`;
+  }
+
   function openGrownups() {
     const listen = Mastery.skillSummary('listen');
     const shop = Mastery.skillSummary('shop');
@@ -118,6 +134,9 @@ const App = (() => {
       <p>Word Town practises the areas from Zac's kindergarten speech screening:
       listening comprehension, word meanings, story telling, and his target sounds
       (<b>/l/</b>, <b>/y/</b>, <b>/zh/</b>). Difficulty adjusts automatically.</p>
+
+      <h3>🔊 Sound</h3>
+      ${voicePanel()}
 
       <h3>🚚 Delivery Run — comprehension (level ${listen.level}/4${acc(listen)})</h3>
       ${bars(listen)}
@@ -140,6 +159,13 @@ const App = (() => {
       Tip: after the game models "First… Then… Last…", pause and let Zac echo each
       sentence before recording. Expanding his sentence back to him ("Yes! The egg
       cracked open!") is great practice too.</p>`;
+
+    const pick = document.getElementById('voice-pick');
+    if (pick) {
+      pick.addEventListener('change', () => Speech.setVoice(pick.value));
+      document.getElementById('voice-test')
+        .addEventListener('click', () => Speech.setVoice(pick.value));
+    }
     grownups.classList.remove('hidden');
   }
 

@@ -11,6 +11,7 @@ const Shop = (() => {
   const ROUND_LEN = 5;
   let area, promptEl;
   let task = null;
+  let lastSpoken = '';      // kept so the 🔊 button works between tasks too
   let roundDone = 0;
   let firstTry = true;
 
@@ -33,7 +34,7 @@ const Shop = (() => {
     }
   }
 
-  function speakPrompt() { if (task) Speech.say(task.spoken); }
+  function speakPrompt() { Speech.say(task ? task.spoken : lastSpoken); }
 
   function nextTask() {
     firstTry = true;
@@ -51,6 +52,7 @@ const Shop = (() => {
   function setPrompt(text, spoken) {
     promptEl.textContent = text;
     task.spoken = spoken || text;
+    lastSpoken = task.spoken;
   }
 
   // ---- which one do we use to …? ----
