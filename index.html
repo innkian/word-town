@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Word Town">
+<title>Word Town</title>
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<div id="app">
+
+  <!-- ======== TITLE ======== -->
+  <section id="screen-title" class="screen active">
+    <div class="title-sky">
+      <div class="cloud c1">☁️</div><div class="cloud c2">☁️</div><div class="sun">☀️</div>
+    </div>
+    <h1 class="game-title"><span>🏘️</span> Word Town</h1>
+    <div class="title-car">🚗</div>
+    <button id="btn-play" class="big-btn">▶️ Play!</button>
+    <div class="title-road"></div>
+  </section>
+
+  <!-- ======== TOWN MAP (hub) ======== -->
+  <section id="screen-town" class="screen">
+    <header class="hud">
+      <button class="icon-btn" data-nav="title">🏠</button>
+      <div class="hud-title">🏘️ Word Town</div>
+      <button id="btn-grownups" class="grownups-btn">👨‍👩‍👧</button>
+      <div class="star-wallet"><span id="star-count">0</span> ⭐</div>
+    </header>
+    <div class="town-grid">
+      <button class="building" data-nav="delivery">
+        <div class="building-emoji">🚚</div><div class="building-name">Delivery Run</div>
+      </button>
+      <button class="building" data-nav="shop">
+        <div class="building-emoji">🛒</div><div class="building-name">Sorting Shop</div>
+      </button>
+      <button class="building" data-nav="sounds">
+        <div class="building-emoji">🔧</div><div class="building-name">Sound Garage</div>
+      </button>
+      <button class="building" data-nav="story">
+        <div class="building-emoji">📖</div><div class="building-name">Story Road</div>
+      </button>
+      <button class="building wide" data-nav="garage">
+        <div class="building-emoji">🏆</div><div class="building-name">My Garage <span id="garage-count"></span></div>
+      </button>
+    </div>
+  </section>
+
+  <!-- ======== DELIVERY RUN (comprehension) ======== -->
+  <section id="screen-delivery" class="screen game-screen">
+    <header class="hud">
+      <button class="icon-btn" data-nav="town">🏘️</button>
+      <div class="hud-title">🚚 Delivery Run</div>
+      <div class="star-wallet"><span class="star-count-live">0</span> ⭐</div>
+    </header>
+    <div class="prompt-bar">
+      <button id="delivery-repeat" class="icon-btn speak-btn">🔊</button>
+      <div id="delivery-prompt" class="prompt-text"></div>
+    </div>
+    <div id="delivery-area" class="play-area"></div>
+    <div id="delivery-progress" class="round-progress"></div>
+  </section>
+
+  <!-- ======== SORTING SHOP (semantics) ======== -->
+  <section id="screen-shop" class="screen game-screen">
+    <header class="hud">
+      <button class="icon-btn" data-nav="town">🏘️</button>
+      <div class="hud-title">🛒 Sorting Shop</div>
+      <div class="star-wallet"><span class="star-count-live">0</span> ⭐</div>
+    </header>
+    <div class="prompt-bar">
+      <button id="shop-repeat" class="icon-btn speak-btn">🔊</button>
+      <div id="shop-prompt" class="prompt-text"></div>
+    </div>
+    <div id="shop-area" class="play-area"></div>
+    <div id="shop-progress" class="round-progress"></div>
+  </section>
+
+  <!-- ======== SOUND GARAGE (articulation) ======== -->
+  <section id="screen-sounds" class="screen game-screen">
+    <header class="hud">
+      <button class="icon-btn" data-nav="town">🏘️</button>
+      <div class="hud-title">🔧 Sound Garage</div>
+      <div class="star-wallet"><span class="star-count-live">0</span> ⭐</div>
+    </header>
+    <div id="sounds-bays" class="bays"></div>
+    <div id="sounds-play" class="hidden">
+      <div id="sound-card" class="sound-card">
+        <div id="sound-emoji" class="sound-emoji">🦁</div>
+        <div id="sound-word" class="sound-word">lion</div>
+      </div>
+      <div class="sound-controls">
+        <button id="sound-hear" class="round-btn">🔊<small>Hear it</small></button>
+        <button id="sound-slow" class="round-btn">🐢<small>Slowly</small></button>
+        <button id="sound-mic" class="round-btn mic-btn">🎤<small>Hold &amp; say it</small></button>
+        <button id="sound-playback" class="round-btn hidden">▶️<small>Hear you!</small></button>
+        <button id="sound-done" class="round-btn done-btn">⭐<small>I said it!</small></button>
+      </div>
+      <div id="sound-fuel" class="fuel-row"></div>
+    </div>
+  </section>
+
+  <!-- ======== STORY ROAD (narrative) ======== -->
+  <section id="screen-story" class="screen game-screen">
+    <header class="hud">
+      <button class="icon-btn" data-nav="town">🏘️</button>
+      <div class="hud-title">📖 Story Road</div>
+      <div class="star-wallet"><span class="star-count-live">0</span> ⭐</div>
+    </header>
+    <div class="prompt-bar">
+      <button id="story-repeat" class="icon-btn speak-btn">🔊</button>
+      <div id="story-prompt" class="prompt-text"></div>
+    </div>
+    <div id="story-slots" class="story-slots"></div>
+    <div id="story-cards" class="story-cards"></div>
+    <div id="story-tell" class="story-tell hidden">
+      <button id="story-mic" class="round-btn mic-btn">🎤<small>Hold &amp; tell it</small></button>
+      <button id="story-playback" class="round-btn hidden">▶️<small>Hear you!</small></button>
+      <button id="story-done" class="round-btn done-btn">⭐<small>I told it!</small></button>
+    </div>
+  </section>
+
+  <!-- ======== MY GARAGE (rewards) ======== -->
+  <section id="screen-garage" class="screen">
+    <header class="hud">
+      <button class="icon-btn" data-nav="town">🏘️</button>
+      <div class="hud-title">🏆 My Garage</div>
+      <div class="star-wallet"><span class="star-count-live">0</span> ⭐</div>
+    </header>
+    <div id="garage-hint" class="garage-hint"></div>
+    <div id="garage-shelf" class="garage-shelf"></div>
+  </section>
+
+  <!-- ======== GROWN-UPS PANEL ======== -->
+  <div id="grownups" class="modal hidden">
+    <div class="modal-card">
+      <h2>👨‍👩‍👧 Grown-ups</h2>
+      <div id="grownups-body"></div>
+      <div class="modal-actions">
+        <button id="grownups-reset" class="small-btn danger">Reset progress</button>
+        <button id="grownups-close" class="small-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== CELEBRATION OVERLAY ======== -->
+  <div id="celebrate" class="celebrate hidden">
+    <div id="celebrate-emoji" class="celebrate-emoji">🎉</div>
+    <div id="celebrate-text" class="celebrate-text"></div>
+  </div>
+
+</div>
+
+<script src="js/speech.js?v=1"></script>
+<script src="js/recorder.js?v=1"></script>
+<script src="js/data.js?v=1"></script>
+<script src="js/mastery.js?v=1"></script>
+<script src="js/delivery.js?v=1"></script>
+<script src="js/shop.js?v=1"></script>
+<script src="js/sounds.js?v=1"></script>
+<script src="js/story.js?v=1"></script>
+<script src="js/main.js?v=1"></script>
+</body>
+</html>
