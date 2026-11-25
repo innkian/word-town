@@ -36,7 +36,15 @@ const Speech = (() => {
       const match = vs.find(v => v.name === saved);
       if (match) { voice = match; return; }
     }
-    voice = vs.slice().sort((a, b) => score(b) - score(a))[0] || null;
+    // Auto-pick stays conservative (this exact order is known to speak on iPad).
+    // Higher-quality voices are chosen by a grown-up in the panel, which lists them first.
+    voice =
+      vs.find(v => v.lang === 'en-AU') ||
+      vs.find(v => v.lang === 'en-GB') ||
+      vs.find(v => /Samantha/i.test(v.name)) ||
+      vs.find(v => v.lang === 'en-US') ||
+      vs[0] ||
+      null;
   }
 
   // Robotic sound comes from low-quality "compact" voices and novelty voices.
