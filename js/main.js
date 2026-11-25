@@ -13,6 +13,7 @@ const App = (() => {
     else if (name === 'shop') Shop.start();
     else if (name === 'sounds') Sounds.start();
     else if (name === 'story') Story.start();
+    else if (name === 'rotto') Rotto.start();
     else if (name === 'garage') renderGarage();
     else if (name === 'town') Speech.say('Where shall we go?');
   }
@@ -100,7 +101,7 @@ const App = (() => {
       case 'fn': return val + ' (what it\'s for)';
       case 'cat': return val + ' category';
       case 'odd': return 'odd one out';
-      default: return val;
+      default: return Rotto.label(key);
     }
   }
   function bars(summary) {
@@ -121,6 +122,10 @@ const App = (() => {
       `<option value="${v.name}"${v.name === Speech.currentVoice() ? ' selected' : ''}>${v.name} (${v.lang})</option>`).join('');
     return `<p>Voice: <select id="voice-pick">${opts}</select>
       <button id="voice-test" class="small-btn">🔊 Test</button></p>
+      <div class="tip"><b>Voice sounds robotic?</b> Download a better one. iPad: Settings → Accessibility →
+      Spoken Content → Voices → English → <b>Australia</b> → get an <b>Enhanced</b> or <b>Premium</b> voice
+      (Karen or Matilda), or a <b>Siri</b> voice. Mac: System Settings → Accessibility → Spoken Content →
+      System Voice → Manage Voices. Reopen the game and it picks the best voice automatically.</div>
       <p style="font-size:13px;color:#647">If you hear nothing, pick a different voice — iPads list
       voices that have not been downloaded, and those stay silent.</p>`;
   }
@@ -137,6 +142,15 @@ const App = (() => {
 
       <h3>🔊 Sound</h3>
       ${voicePanel()}
+
+      <h3>🦘 Rottnest Rangers — listening comprehension</h3>
+      ${Rotto.SKILLS.map(r => { const m = Mastery.skillSummary(r.skill);
+        return `<h4>${r.title} (level ${m.level}/4${acc(m)})</h4>${bars(m)}` +
+          (m.weak.length ? `<div class="tip">Practise together: ${m.weak.map(c => conceptLabel(c.key)).join(', ')}</div>` : ''); }).join('')}
+      <div class="tip"><b>How to help:</b> say it once, then wait about 5 seconds before repeating —
+      processing time matters. If he misses it, shorten it to the key words and point to the picture
+      rather than repeating louder. Ask him to tell you what the ranger asked, then talk about the answer
+      ("Why did the kangaroo hide?"). Real-life practice: bike ride, ferry, beach — "Who is behind the…?"</div>
 
       <h3>🚚 Delivery Run — comprehension (level ${listen.level}/4${acc(listen)})</h3>
       ${bars(listen)}
@@ -201,6 +215,7 @@ const App = (() => {
 
   Sounds.bindControls();
   Story.bindControls();
+  Rotto.bindControls();
   updateStars();
 
   return { show, finishRound, updateStars };

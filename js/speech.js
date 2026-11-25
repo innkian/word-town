@@ -36,13 +36,26 @@ const Speech = (() => {
       const match = vs.find(v => v.name === saved);
       if (match) { voice = match; return; }
     }
-    voice =
-      vs.find(v => v.lang === 'en-AU') ||     // his own accent, if installed
-      vs.find(v => v.lang === 'en-GB') ||
-      vs.find(v => /Samantha/i.test(v.name)) ||
-      vs.find(v => v.lang === 'en-US') ||
-      vs[0] ||
-      null;
+    voice = vs.slice().sort((a, b) => score(b) - score(a))[0] || null;
+  }
+
+  // Robotic sound comes from low-quality "compact" voices and novelty voices.
+  // Rank by quality first (Premium / Siri / Enhanced / Natural), then accent.
+  const NOVELTY = /albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|organ|pipe|trinoids|whisper|wobble|zarvox|superstar|fred|junior|ralph|kathy|eloquence|grandma|grandpa|rocko|sandy|shelley|flo\b|eddy|reed/i;
+  function score(v) {
+    const n = v.name || '';
+    let sc = 0;
+    if (/premium/i.test(n)) sc += 120;
+    if (/siri/i.test(n)) sc += 100;
+    if (/natural|neural|online/i.test(n)) sc += 100;
+    if (/enhanced/i.test(n)) sc += 70;
+    if (/compact/i.test(n)) sc -= 40;
+    if (NOVELTY.test(n)) sc -= 300;
+    if (v.lang === 'en-AU' || v.lang === 'en_AU') sc += 30;
+    else if (v.lang === 'en-GB') sc += 12;
+    else if (v.lang === 'en-US') sc += 8;
+    if (/karen|matilda|lee|catherine|samantha|daniel|serena/i.test(n)) sc += 4;
+    return sc;
   }
   if (supported) {
     pickVoice();
@@ -72,8 +85,8 @@ const Speech = (() => {
     const u = new SpeechSynthesisUtterance(text);
     if (useVoice) u.voice = useVoice;
     u.lang = (useVoice && useVoice.lang) || 'en-AU';
-    u.rate = opts.rate != null ? opts.rate : 0.85;
-    u.pitch = opts.pitch != null ? opts.pitch : 1.06;
+    u.rate = opts.rate != null ? opts.rate : 0.9;
+    u.pitch = opts.pitch != null ? opts.pitch : 1.0;
     return u;
   }
 
@@ -131,7 +144,7 @@ const Speech = (() => {
   function stop() { if (supported) speechSynthesis.cancel(); }
 
   // ---- grown-ups voice picker ----
-  function listVoices() { return usableVoices().map(v => ({ name: v.name, lang: v.lang })); }
+  function listVoices() { return usableVoices().sort((a, b) => score(b) - score(a)).map(v => ({ name: v.name, lang: v.lang })); }
   function currentVoice() { return voice ? voice.name : 'Default'; }
   function setVoice(name) {
     const match = usableVoices().find(v => v.name === name);
